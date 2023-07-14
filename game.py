@@ -23,4 +23,4 @@ def run_game():
        gf.update_aliens(setti,aliens)
        gf.update_screen(setti,screen,ship,bullets,aliens)  
 
-run_game()
+run_game() 

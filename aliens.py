@@ -20,10 +20,11 @@ class Alien(Sprite):
     
     def check_edges(self):
         screen_rect = self.screen.get_rect()
-        if self.rect.right >= screen_rect.right:
+        if self.rect.right >= 1200:
             return True
         elif self.rect.left <= 0:
             return True
         
         def update(self):
-            self.x += self.setti.alien_speed_factor*self.setti.fleet_direction
+            self.x += int(self.setti.alien_speed_factor*self.setti.fleet_direction)
+            self.rect.x = self.x
