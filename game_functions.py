@@ -48,10 +48,13 @@ def fire_bullet(setti,screen,ship,bullets):
 
 def create_aliens_rows(setti,screen,aliens,row_number):
         alien = Alien(setti,screen)
-        alien_width= alien.rect.width
+        alien_width = alien.rect.width
         available_space_x = setti.screen_width - 2*alien_width
-        number_aliens_x = int(available_space_x / 2*alien_width)-3
-        for alien_number in range(number_aliens_x):
+        # print(available_space_x,int(alien_width))
+        number_aliens_x = 0
+        number_aliens_x = int(available_space_x / (2*alien_width))
+        # print(number_aliens_x)
+        for alien_number in range(number_aliens_x ):
               alien = Alien(setti,screen)
               alien.x = alien_width + 2*alien_width*alien_number
               alien.rect.x = alien.x
@@ -73,12 +76,12 @@ def check_fleet_edges(setti,aliens):
                 break
               
 def change_fleet_direction(setti,aliens):
-        for alienn in aliens.sprites():
-            alienn.rect.y += setti.alien_drop_speed
+        # for alienn in aliens.sprites():
+        #     alienn.rect.y += setti.alien_drop_speed
         setti.fleet_direction *= -1
 
 def update_aliens(setti,aliens):
-        check_fleet_edges(setti,aliens)   
+        # check_fleet_edges(setti,aliens)   
         aliens.update()                 
        
 
