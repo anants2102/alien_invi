@@ -76,12 +76,12 @@ def check_fleet_edges(setti,aliens):
                 break
               
 def change_fleet_direction(setti,aliens):
-        # for alienn in aliens.sprites():
-        #     alienn.rect.y += setti.alien_drop_speed
+        for alienn in aliens.sprites():
+            alienn.rect.y += setti.alien_drop_speed*setti.fleet_direction
         setti.fleet_direction *= -1
 
 def update_aliens(setti,aliens):
-        # check_fleet_edges(setti,aliens)   
+        check_fleet_edges(setti,aliens)   
         aliens.update()                 
        
 

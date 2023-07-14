@@ -25,6 +25,6 @@ class Alien(Sprite):
         elif self.rect.left <= 0:
             return True
         
-        def update(self):
+    def update(self):
             self.x += int(self.setti.alien_speed_factor*self.setti.fleet_direction)
             self.rect.x = self.x
