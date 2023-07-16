@@ -1,5 +1,6 @@
 import sys
 import pygame
+from time import sleep
 # import ship
 from bullet import Bullets
 from aliens import Alien
@@ -35,12 +36,15 @@ def check_keyup_event(event,ship):
     elif event.key == pygame.K_LEFT:
                 ship.moving_left = False
 
-def update_bullets(aliens,bullets):
+def update_bullets(setti,screen,ship,aliens,bullets):
     bullets.update()
     for bullet in bullets.copy():
            if bullet.rect.bottom <= 0:
                   bullets.remove(bullet)
     collisions = pygame.sprite.groupcollide(bullets,aliens,True,True)
+    if(len(aliens) == 0):
+           bullets.empty()
+           create_fleet(setti,screen,ship,aliens)
 
 def fire_bullet(setti,screen,ship,bullets):
         new_bullet = Bullets(setti,screen,ship)
@@ -69,19 +73,47 @@ def create_fleet(setti,screen,ship,aliens):
        for row_number in range(number_rows):
               create_aliens_rows(setti,screen,aliens,row_number)
               
-def check_fleet_edges(setti,aliens):
+def check_fleet_edges(setti,aliens,stats,ship,bullets,screen):
        for alien in aliens.sprites():
               if alien.check_edges():
-                change_fleet_direction(setti,aliens)   
+                change_fleet_direction(setti,aliens)
                 break
               
-def change_fleet_direction(setti,aliens):
+def check_fleet_bottom(setti,aliens,stats,ship,bullets,screen):
+       for alien in aliens.sprites():
+        if alien.check_bottom(screen):
+              reset_game(stats,aliens,ship,bullets,screen,setti) 
+              break   
+        
+              
+              
+def change_fleet_direction(setti,aliens,):
         for alienn in aliens.sprites():
-            alienn.rect.y += setti.alien_drop_speed*setti.fleet_direction
+            alienn.rect.y += setti.alien_drop_speed 
         setti.fleet_direction *= -1
 
-def update_aliens(setti,aliens):
-        check_fleet_edges(setti,aliens)   
-        aliens.update()                 
+def reset_game(stats,aliens,ship,bullets,screen,setti):       
+    stats.ships_left -= 1
+    if(stats.ships_left > 0):
+        aliens.empty()
+    # ship.empty()
+        bullets.empty()
+    
+        create_fleet(setti,screen,ship,aliens)
+        ship.center_ship()
+
+        sleep(1)
+    else:
+          stats.active_status = False
+
+
+def update_aliens(setti,aliens,ship,bullets,stats,screen):
+        check_fleet_edges(setti,aliens,stats,ship,bullets,screen) 
+        check_fleet_bottom(setti,aliens,stats,ship,bullets,screen)  
+        aliens.update()         
+        if pygame.sprite.spritecollideany(ship,aliens):
+          reset_game(stats,aliens,ship,bullets,screen,setti)  
+
+        
        
 

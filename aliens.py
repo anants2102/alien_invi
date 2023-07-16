@@ -19,11 +19,19 @@ class Alien(Sprite):
         self.screen.blit(self.image,self.rect)
     
     def check_edges(self):
+        setti = self.setti
         screen_rect = self.screen.get_rect()
-        if self.rect.right >= 1200:
+        
+        if self.rect.right >= setti.screen_width:
             return True
         elif self.rect.left <= 0:
             return True
+    def check_bottom(self,screen):
+         screen_rect = screen.get_rect()
+         if self.rect.bottom >= screen_rect.bottom:
+             print(screen_rect.bottom)
+             return True
+        
         
     def update(self):
             self.x += int(self.setti.alien_speed_factor*self.setti.fleet_direction)
