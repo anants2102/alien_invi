@@ -24,3 +24,6 @@ class Ship():
         if self.moving_left and self.rect.left > 0:
             self.rect.centerx -= self.se.ship_speed_factor
         # self.rect.centerx = self.center
+
+    def center_ship(self):
+        self.rect.centerx = self.screen_rect.centerx
