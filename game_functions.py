@@ -4,21 +4,35 @@ from time import sleep
 # import ship
 from bullet import Bullets
 from aliens import Alien
-def check_events(setti,screen,ship,bullets):
+def check_events(setti,screen,ship,bullets,stats,aliens):
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            check_keydown_event(event,setti,screen,ship,bullets)
+            check_keydown_event(event,setti,screen,ship,bullets,)
         elif event.type == pygame.KEYUP:
             check_keyup_event(event,ship)
+        elif event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.K_KP_ENTER:
+            #   mx,my = pygame.mouse.get_pos()
+              stats.active_status = True
+              empyt_screen(bullets,setti,screen,ship,aliens)
+              pygame.mouse.set_visible(False)
+        elif event.type == pygame.K_a:
+                    stats.active_status = False
 
-def update_screen(setti,screen, ship,bullets,alien):
+
+
+def update_screen(setti,stats,screen, ship,bullets,alien,play,scores):
     screen.fill(setti.bg_color)
     for bullet in bullets.sprites():
            bullet.draw_bullet()
     ship.blitme()
     alien.draw(screen)
+    if not stats.active_status:
+          play.draw_button()
+          play.show_inst()
+    scores.show_score()
     pygame.display.flip()  
 
 
@@ -36,12 +50,15 @@ def check_keyup_event(event,ship):
     elif event.key == pygame.K_LEFT:
                 ship.moving_left = False
 
-def update_bullets(setti,screen,ship,aliens,bullets):
+def update_bullets(setti,screen,ship,aliens,bullets,stats,scores):
     bullets.update()
     for bullet in bullets.copy():
            if bullet.rect.bottom <= 0:
                   bullets.remove(bullet)
     collisions = pygame.sprite.groupcollide(bullets,aliens,True,True)
+    if collisions:
+          stats.scored += setti.redap
+          scores.pre_score()
     if(len(aliens) == 0):
            bullets.empty()
            create_fleet(setti,screen,ship,aliens)
@@ -95,16 +112,11 @@ def change_fleet_direction(setti,aliens,):
 def reset_game(stats,aliens,ship,bullets,screen,setti):       
     stats.ships_left -= 1
     if(stats.ships_left > 0):
-        aliens.empty()
-    # ship.empty()
-        bullets.empty()
-    
-        create_fleet(setti,screen,ship,aliens)
-        ship.center_ship()
-
-        sleep(1)
+        empyt_screen(bullets,setti,screen,ship,aliens)
     else:
           stats.active_status = False
+          pygame.mouse.set_visible(True)
+
 
 
 def update_aliens(setti,aliens,ship,bullets,stats,screen):
@@ -114,6 +126,13 @@ def update_aliens(setti,aliens,ship,bullets,stats,screen):
         if pygame.sprite.spritecollideany(ship,aliens):
           reset_game(stats,aliens,ship,bullets,screen,setti)  
 
-        
-       
+def empyt_screen(bullets,setti,screen,ship,aliens):
+        aliens.empty()
+    # ship.empty()
+        bullets.empty()
+    
+        create_fleet(setti,screen,ship,aliens)
+        ship.center_ship()
+
+        sleep(0.5)
 
