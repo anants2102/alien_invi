@@ -9,7 +9,7 @@ class Setting():
 
         #ship setting
         self.ship_speed_factor = 3
-        self.ship_limit = 1
+        self.ship_limit = 3
 
         #bullet setting
         self.bullet_speed_factor = 5

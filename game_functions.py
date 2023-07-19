@@ -2,9 +2,9 @@ import sys
 import pygame
 from time import sleep
 # import ship
-from bullet import Bullets
+from bullet import Bullets,mass_Bullets
 from aliens import Alien
-def check_events(setti,screen,ship,bullets,stats,aliens):
+def check_events(setti,screen,ship,bullets,stats,aliens,scores):
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -15,9 +15,11 @@ def check_events(setti,screen,ship,bullets,stats,aliens):
             check_keyup_event(event,ship)
         elif event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.K_KP_ENTER:
             #   mx,my = pygame.mouse.get_pos()
-              stats.active_status = True
+            if not stats.active_status :
+              stats.active_status = True             
               empyt_screen(bullets,setti,screen,ship,aliens)
               pygame.mouse.set_visible(False)
+              scores.pre_ship()
         elif event.type == pygame.K_a:
                     stats.active_status = False
 
@@ -31,7 +33,7 @@ def update_screen(setti,stats,screen, ship,bullets,alien,play,scores):
     alien.draw(screen)
     if not stats.active_status:
           play.draw_button()
-          play.show_inst()
+        #   play.show_inst(inst)
     scores.show_score()
     pygame.display.flip()  
 
@@ -43,6 +45,8 @@ def check_keydown_event(event,setti,screen,ship,bullets):
                 ship.moving_left = True
     elif event.key == pygame.K_SPACE:
                fire_bullet(setti,screen,ship,bullets)
+    elif event.key == pygame.K_i:
+           fire_mass_bullets(setti,screen,ship,bullets)
 
 def check_keyup_event(event,ship):
     if event.key == pygame.K_RIGHT:
@@ -57,14 +61,18 @@ def update_bullets(setti,screen,ship,aliens,bullets,stats,scores):
                   bullets.remove(bullet)
     collisions = pygame.sprite.groupcollide(bullets,aliens,True,True)
     if collisions:
-          stats.scored += setti.redap
-          scores.pre_score()
+          for aliens in collisions.values():
+            stats.scored += setti.redap*len(aliens)
+            scores.pre_score()
     if(len(aliens) == 0):
            bullets.empty()
            create_fleet(setti,screen,ship,aliens)
 
 def fire_bullet(setti,screen,ship,bullets):
         new_bullet = Bullets(setti,screen,ship)
+        bullets.add(new_bullet)
+def fire_mass_bullets(setti,screen,ship,bullets):
+        new_bullet = mass_Bullets(setti,screen,ship)
         bullets.add(new_bullet)
 
 def create_aliens_rows(setti,screen,aliens,row_number):
@@ -96,10 +104,10 @@ def check_fleet_edges(setti,aliens,stats,ship,bullets,screen):
                 change_fleet_direction(setti,aliens)
                 break
               
-def check_fleet_bottom(setti,aliens,stats,ship,bullets,screen):
+def check_fleet_bottom(setti,aliens,stats,ship,bullets,screen,scores):
        for alien in aliens.sprites():
         if alien.check_bottom(screen):
-              reset_game(stats,aliens,ship,bullets,screen,setti) 
+              reset_game(stats,aliens,ship,bullets,screen,setti,scores) 
               break   
         
               
@@ -109,22 +117,24 @@ def change_fleet_direction(setti,aliens,):
             alienn.rect.y += setti.alien_drop_speed 
         setti.fleet_direction *= -1
 
-def reset_game(stats,aliens,ship,bullets,screen,setti):       
+def reset_game(stats,aliens,ship,bullets,screen,setti,scores):       
     stats.ships_left -= 1
     if(stats.ships_left > 0):
+        scores.pre_ship()
         empyt_screen(bullets,setti,screen,ship,aliens)
     else:
+          stats.scored = 0
           stats.active_status = False
           pygame.mouse.set_visible(True)
 
 
 
-def update_aliens(setti,aliens,ship,bullets,stats,screen):
+def update_aliens(setti,aliens,ship,bullets,stats,screen,scores):
         check_fleet_edges(setti,aliens,stats,ship,bullets,screen) 
-        check_fleet_bottom(setti,aliens,stats,ship,bullets,screen)  
+        check_fleet_bottom(setti,aliens,stats,ship,bullets,screen,scores)  
         aliens.update()         
         if pygame.sprite.spritecollideany(ship,aliens):
-          reset_game(stats,aliens,ship,bullets,screen,setti)  
+          reset_game(stats,aliens,ship,bullets,screen,setti,scores)  
 
 def empyt_screen(bullets,setti,screen,ship,aliens):
         aliens.empty()

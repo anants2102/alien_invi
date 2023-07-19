@@ -25,11 +25,11 @@ def run_game():
     
     while True:
      gf.update_screen(setti,stats,screen,ship,bullets,aliens,play,scores)
-     gf.check_events(setti,screen,ship,bullets,stats,aliens)
+     gf.check_events(setti,screen,ship,bullets,stats,aliens,scores)
      if stats.active_status:
        ship.update()
        gf.update_bullets(setti,screen,ship,aliens,bullets,stats,scores)
-       gf.update_aliens(setti,aliens,ship,bullets,stats,screen)
+       gf.update_aliens(setti,aliens,ship,bullets,stats,screen,scores)
     #  else:
     #    print("not active")
     #    break
