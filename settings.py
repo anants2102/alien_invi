@@ -22,6 +22,8 @@ class Setting():
         self.alien_drop_speed = 10
         self.fleet_direction = 1
         
+        #scoring
+        self.redap = 10
 
 
     
