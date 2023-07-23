@@ -8,7 +8,7 @@ class Setting():
         self.bg_color = (20,20,20)
 
         #ship setting
-        self.ship_speed_factor = 3
+        self.ship_speed_factor = 1
         self.ship_limit = 3
 
         #bullet setting

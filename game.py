@@ -8,7 +8,7 @@ from aliens import Alien
 from game_stats import GameStats
 from button import Button
 from scoreboard import Scoreboard
-def run_game():
+def run_game(): 
     pygame.init()
     setti = Setting()
     # print(setti.screen_width + 12)  
@@ -18,18 +18,19 @@ def run_game():
     # alien = Alien(setti,screen)
     bullets = Group()
     aliens = Group()
+    mass_bullets = Group()
     stats = GameStats(setti)
     play = Button(setti,screen,"Play")
     scores = Scoreboard(setti,screen,stats)
     gf.create_fleet(setti,screen,ship,aliens)
     
     while True:
-     gf.update_screen(setti,stats,screen,ship,bullets,aliens,play,scores)
-     gf.check_events(setti,screen,ship,bullets,stats,aliens,scores)
+     gf.update_screen(setti,stats,screen,ship,bullets,aliens,play,scores,mass_bullets)
+     gf.check_events(setti,screen,ship,bullets,stats,aliens,scores,mass_bullets)
      if stats.active_status:
        ship.update()
-       gf.update_bullets(setti,screen,ship,aliens,bullets,stats,scores)
-       gf.update_aliens(setti,aliens,ship,bullets,stats,screen,scores)
+       gf.update_bullets(setti,screen,ship,aliens,bullets,stats,scores,mass_bullets)
+       gf.update_aliens(setti,aliens,ship,bullets,stats,screen,scores,mass_bullets)
     #  else:
     #    print("not active")
     #    break
