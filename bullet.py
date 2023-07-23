@@ -23,9 +23,8 @@ class Bullets(Sprite):
 
 class mass_Bullets(Sprite):
     def __init__(self,setti,screen,ship):
-        super(Bullets,self).__init__()
         self.screen = screen
-
+        super(mass_Bullets,self).__init__()
         self.rect = pygame.Rect(0,0,1200,setti.bullet_height)
         self.rect.centerx = ship.rect.centerx
         self.rect.top = ship.rect.top
