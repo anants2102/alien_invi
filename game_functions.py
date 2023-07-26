@@ -146,7 +146,7 @@ def update_aliens(setti,aliens,ship,bullets,stats,screen,scores,mass_bullets):
         check_fleet_bottom(setti,aliens,stats,ship,bullets,screen,scores,mass_bullets)  
         aliens.update()         
         if pygame.sprite.spritecollideany(ship,aliens):
-          reset_game(stats,aliens,ship,bullets,screen,setti,scores)  
+          reset_game(stats,aliens,ship,bullets,screen,setti,scores,mass_bullets)  
 
 def empyt_screen(bullets,setti,screen,ship,aliens,mass_bullets):
         aliens.empty()
